@@ -168,14 +168,8 @@ int pedirValorBase(int opcao)
     return numBase;
 }
 
-int main()
+void mostrarInterface()
 {
-
-    /*
-        Está será a lógica da interface
-    */
-
-    printf(" \n \n PROGRAMA DE CONVERSAO DE BASES NUMERICAS \n \n");
     int base1 = pedirValorBase(1);
     char num1[128];
     int base2 = 0;
@@ -189,7 +183,41 @@ int main()
     char* numeroFinal = transformarDeDecimal(numeroDecimal, base2);
 
     printf("Resultado: %s\n", numeroFinal);
+}
 
+int pedirContinuarPrograma()
+{
+    int continuar = 0;
+    char escolha;
+
+    puts("Deseja continuar? S/N");
+    scanf(" %c", &escolha);
+
+    if(escolha == 's' || escolha == 'S')
+    {
+
+        continuar = 1;
+    }
+    else
+    {
+        continuar = 0;
+    }
+    return continuar;
+}
+
+int main()
+{
+    int continuar = 0;
+    printf(" ######################################### \n");
+    printf(" PROGRAMA DE CONVERSAO DE BASES NUMERICAS \n");
+    printf(" ######################################### \n \n");
+
+    do
+    {
+        mostrarInterface();
+        continuar = pedirContinuarPrograma();
+    }
+    while(continuar);
 
     return 0;
 }
