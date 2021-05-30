@@ -3,6 +3,31 @@
 #include <string.h>
 #include <math.h>
 
+/* Exercício: Programa de conversão de bases numérica
+ * Autor: Arthur Konrad
+ * 2021
+ * Um pequeno programa para treino que consiste em transformar numeros de diferentes bases numéricas,
+ * podemos transformar por exemplo binários para hexedecimais, base 5 para base 10 e por assim vai,
+ * até a base 36, cujo usa todos os digitos e letras do alfabeto em inglês (0..9) (a..z)
+ * Para bases acima de 10, pode se utilizar as letras do alfabeto em maisculo ou minusculo
+ * A conversão de caracteres é utilizando a tabela ASCII
+*/
+
+
+enum ASCII
+{
+    INI_DIGITOS = '0',
+    FIM_DIGITOS = '9',
+    INI_MINUSCULO = 'a',
+    FIM_MINUSCULO = 'z',
+    INI_MAIUSCULO = 'A',
+    FIM_MAIUSCULO = 'Z',
+    MINUSCULO_PARA_DIGITO = 87,
+    MAIUSCULO_PARA_DIGITO = 55
+
+
+
+};
 
 // Está é a parte "lógica" do programa
 
@@ -38,20 +63,32 @@ int validarValorBase(size_t numeroBase)
     return valido;
 }
 
+/*
+  INI_DIGITOS = 48,
+    FIM_DIGITOS = 57,
+    INI_MINUSCULO = 97,
+    FIM_MINUSCULO = 122,
+    INI_MAIUSCULO = 65,
+    FIM_MAIUSCULO = 90,
+    MINUSCULO_PARA_DIGITO = 87,
+    MAIUSCULO_PARA_DIGITO = 55
+
+*/
+
 int arrumarDigitoParaDecimal(char digito)
 {
     long digitoAjustado = 0;
-    if(digito >= 48 && digito <= 57)
+    if(digito >= INI_DIGITOS && digito <= FIM_DIGITOS)
     {
-        digitoAjustado = digito - 48;
+        digitoAjustado = digito - INI_DIGITOS;
     }
-    else if (digito >= 97 && digito <= 122)
+    else if (digito >= INI_MINUSCULO && digito <= FIM_MINUSCULO)
     {
-        digitoAjustado = digito - 87; //Aqui transformamos as letras minusculas do alfabeto [a..z] em conspondente de numeros, começando a como 10, b como 11, c como 12 assim por diantae
+        digitoAjustado = digito - MINUSCULO_PARA_DIGITO; //Aqui transformamos as letras minusculas do alfabeto [a..z] em conspondente de numeros, começando a como 10, b como 11, c como 12 assim por diantae
     }
-    else if (digito >= 65 && digito <= 90)
+    else if (digito >= INI_MAIUSCULO && digito <= FIM_MAIUSCULO)
     {
-        digitoAjustado = digito - 55; //Aqui transformamos as letras MAIUSCULAS do alfabeto [A..Z] em conspondente de numeros, começando A como 10, B como 11, C como 12 assim por diante
+        digitoAjustado = digito - MAIUSCULO_PARA_DIGITO; //Aqui transformamos as letras MAIUSCULAS do alfabeto [A..Z] em conspondente de numeros, começando A como 10, B como 11, C como 12 assim por diante
     }
     else
     {
@@ -82,16 +119,21 @@ char arrumarDigitoDeDecimal(long digito)
 }
 
 
-int validarValorNumero(char* valor)
+int validarValorNumero(char* valor, int base)
 {
     size_t i;
     int valido = 0;
+    int digitoAjustado = 0;
     for(i = 0 ; i < strlen(valor) ; i++)
     {
-        valido = arrumarDigitoParaDecimal(valor[i]) > -1 ? 1 : 0;
-
-        if(!valido)
+        digitoAjustado = arrumarDigitoParaDecimal(valor[i]);
+        if( digitoAjustado < base && digitoAjustado > - 1)
         {
+            valido = 1;
+        }
+        else
+        {
+            valido = 0;
             break;
         }
     }
@@ -174,8 +216,13 @@ void mostrarInterface()
     char num1[128];
     int base2 = 0;
 
+    do
+    {
+
     printf("Digite o valor do numero: \n");
     scanf("%s", &num1);
+
+    }while(!validarValorNumero(num1, base1));
 
     base2 = pedirValorBase(2);
 
@@ -205,6 +252,8 @@ int pedirContinuarPrograma()
     return continuar;
 }
 
+
+
 int main()
 {
     int continuar = 0;
@@ -212,12 +261,15 @@ int main()
     printf(" PROGRAMA DE CONVERSAO DE BASES NUMERICAS \n");
     printf(" ######################################### \n \n");
 
+
     do
     {
         mostrarInterface();
         continuar = pedirContinuarPrograma();
     }
     while(continuar);
+
+
 
     return 0;
 }
